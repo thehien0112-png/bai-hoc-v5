@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Đăng nhập — Tool Editor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#0a2342; --navy-2:#0d2c52;
+  --blue:#2563eb; --blue-700:#1d57d6;
+  --ink:#1f2a37; --muted:#6b7280; --muted-2:#9aa3af;
+  --line:#e4e7ec; --line-2:#d0d5dd; --bg:#f4f7fb;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%}
+body{font-family:'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+.page{min-height:100vh;display:flex;flex-direction:column}
+
+/* top bar */
+.topbar{height:72px;background:var(--navy);display:flex;align-items:center;padding:0 34px;gap:13px;flex:none}
+.logo-badge{width:36px;height:36px;border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--navy)}
+.logo-badge svg{width:20px;height:20px}
+.logo-text{color:#fff;font-weight:800;font-size:21px;letter-spacing:-.2px}
+
+/* stage */
+.stage{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px;position:relative;overflow:hidden}
+.stage::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(900px 480px at 50% -10%, #e8f0fe 0%, rgba(232,240,254,0) 60%),
+  radial-gradient(700px 420px at 110% 120%, #eef4ff 0%, rgba(238,244,255,0) 55%);pointer-events:none}
+
+.card{width:min(460px,100%);background:#fff;border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 24px 60px rgba(16,30,60,.12);padding:38px 38px 34px;position:relative;z-index:1}
+@media (prefers-reduced-motion: no-preference){
+  .card{animation:rise .3s ease both}
+}
+@keyframes rise{from{transform:translateY(12px)}to{transform:none}}
+
+.welcome{text-align:center;margin-bottom:26px}
+.welcome h1{margin:0;font-size:27px;font-weight:800;color:var(--navy);letter-spacing:-.4px}
+.welcome p{margin:7px 0 0;color:var(--muted);font-size:14.5px}
+
+/* role list */
+.roles{display:flex;flex-direction:column;gap:13px}
+.role{display:flex;align-items:center;gap:15px;width:100%;border:1.5px solid var(--line);border-radius:13px;
+  background:#fff;padding:15px 17px;text-align:left;transition:.16s}
+.role:hover{border-color:var(--rc,#2563eb);box-shadow:0 8px 22px rgba(20,40,80,.10);transform:translateY(-1px)}
+.role .r-ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;color:#fff;flex:none;background:var(--rc)}
+.role .r-ic svg{width:23px;height:23px}
+.role .r-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.role .r-name{display:block;font-weight:700;font-size:16px;color:var(--ink)}
+.role .r-sub{display:block;font-size:12.8px;color:var(--muted)}
+.role .r-arrow{color:var(--muted-2);transition:.16s;flex:none}
+.role:hover .r-arrow{color:var(--rc);transform:translateX(3px)}
+
+/* form */
+.form-head{display:flex;align-items:center;gap:13px;margin-bottom:22px}
+.back-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--line-2);background:#fff;color:var(--muted);
+  display:grid;place-items:center;flex:none}
+.back-btn:hover{background:#f3f5f8;color:var(--ink)}
+.form-role{display:flex;align-items:center;gap:11px}
+.form-role .fr-ic{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;color:#fff;flex:none}
+.form-role .fr-ic svg{width:20px;height:20px}
+.form-role .fr-name{font-weight:800;font-size:17px;color:var(--navy);line-height:1.2}
+.form-role .fr-sub{font-size:12.5px;color:var(--muted)}
+
+.field{margin-bottom:15px}
+.field label{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:7px}
+.inp{position:relative;display:flex;align-items:center}
+.inp svg.lead{position:absolute;left:14px;width:18px;height:18px;color:var(--muted-2);pointer-events:none}
+.inp input{width:100%;height:50px;border:1.5px solid var(--line-2);border-radius:11px;padding:0 14px 0 44px;
+  font-size:15px;font-family:inherit;outline:none;background:#fff;transition:.14s;color:var(--ink)}
+.inp input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+.inp .toggle-eye{position:absolute;right:12px;width:34px;height:34px;border:none;background:transparent;color:var(--muted);
+  display:grid;place-items:center;border-radius:8px}
+.inp .toggle-eye:hover{background:#f1f3f6;color:var(--ink)}
+
+.row-between{display:flex;align-items:center;justify-content:space-between;margin:4px 0 22px}
+.remember{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--ink);cursor:pointer;user-select:none}
+.cbox{width:18px;height:18px;border:1.6px solid var(--line-2);border-radius:5px;display:grid;place-items:center;transition:.12s;flex:none}
+.cbox.on{background:var(--blue);border-color:var(--blue)}
+.cbox svg{width:12px;height:12px;color:#fff}
+.forgot{font-size:13.5px;color:var(--blue);text-decoration:none;font-weight:600}
+.forgot:hover{text-decoration:underline}
+
+.submit{width:100%;height:52px;border:none;border-radius:12px;background:var(--rc,var(--blue));color:#fff;
+  font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;gap:9px;transition:.14s;
+  box-shadow:0 8px 20px rgba(37,99,235,.28)}
+.submit:hover{filter:brightness(1.06)}
+.submit svg{width:18px;height:18px}
+
+.alt-role{text-align:center;margin-top:18px;font-size:13.5px;color:var(--muted)}
+.alt-role button{border:none;background:transparent;color:var(--blue);font-weight:700;font-family:inherit;font-size:13.5px}
+.alt-role button:hover{text-decoration:underline}
+
+.foot{text-align:center;color:var(--muted-2);font-size:12.5px;padding:18px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="icons.jsx"></script>
+<script type="text/babel">
+const { useState } = React;
+
+const ROLES = [
+  { id:'gd',  name:'Giám đốc / Hiệu trưởng', sub:'Quản trị toàn hệ thống, báo cáo tổng quan', icon:'briefcase', color:'#1d4ed8' },
+  { id:'gv',  name:'Quản lý / Giáo viên',    sub:'Soạn bài, tạo nội dung, giao bài tập',      icon:'reader',    color:'#16a34a' },
+  { id:'ph',  name:'Phụ huynh',              sub:'Theo dõi việc học của con',                 icon:'users',     color:'#0891b2' },
+  { id:'hs',  name:'Nhân viên / Học sinh',   sub:'Làm bài, học tập, tra cứu',                 icon:'graduate',  color:'#7c3aed' },
+];
+
+function Logo(){
+  return (
+    <div className="topbar">
+      <span className="logo-badge"><Icon name="wand" size={20}/></span>
+      <span className="logo-text">Tool Editor</span>
+    </div>
+  );
+}
+
+function RolePicker({onPick}){
+  return (
+    <div className="card">
+      <div className="welcome">
+        <h1>Chào mừng bạn trở lại</h1>
+        <p>Vui lòng chọn tư cách đăng nhập</p>
+      </div>
+      <div className="roles">
+        {ROLES.map(r=>(
+          <button className="role" key={r.id} style={{['--rc']:r.color}} onClick={()=>onPick(r)}>
+            <span className="r-ic"><Icon name={r.icon} size={23}/></span>
+            <span className="r-main">
+              <span className="r-name">{r.name}</span>
+              <span className="r-sub">{r.sub}</span>
+            </span>
+            <span className="r-arrow"><Icon name="chevRight" size={20}/></span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function LoginForm({role, onBack}){
+  const [show, setShow] = useState(false);
+  const [remember, setRemember] = useState(false);
+  const [email, setEmail] = useState('');
+  const [pw, setPw] = useState('');
+  return (
+    <div className="card">
+      <div className="form-head">
+        <button className="back-btn" onClick={onBack} aria-label="Quay lại"><Icon name="back" size={18}/></button>
+        <div className="form-role">
+          <span className="fr-ic" style={{background:role.color}}><Icon name={role.icon} size={20}/></span>
+          <div>
+            <div className="fr-name">{role.name}</div>
+            <div className="fr-sub">Đăng nhập với tư cách này</div>
+          </div>
+        </div>
+      </div>
+
+      <form onSubmit={e=>{e.preventDefault(); window.location.href='Bài học V4.html';}}>
+        <div className="field">
+          <label>Email / Tên đăng nhập</label>
+          <div className="inp">
+            <Icon name="mail" size={18} style={{position:'absolute',left:14}} className="lead"/>
+            <input type="text" value={email} onChange={e=>setEmail(e.target.value)} placeholder="quantri@vhg.com" autoFocus/>
+          </div>
+        </div>
+        <div className="field">
+          <label>Mật khẩu</label>
+          <div className="inp">
+            <Icon name="lock" size={18} style={{position:'absolute',left:14}} className="lead"/>
+            <input type={show?'text':'password'} value={pw} onChange={e=>setPw(e.target.value)} placeholder="Nhập mật khẩu"/>
+            <button type="button" className="toggle-eye" onClick={()=>setShow(s=>!s)} aria-label="Hiện mật khẩu">
+              <Icon name={show?'eye':'eyeOff'} size={18}/>
+            </button>
+          </div>
+        </div>
+
+        <div className="row-between">
+          <label className="remember" onClick={()=>setRemember(r=>!r)}>
+            <span className={'cbox'+(remember?' on':'')}>{remember && <Icon name="check" size={12} stroke={3}/>}</span>
+            Lưu mật khẩu
+          </label>
+          <a href="#" className="forgot" onClick={e=>e.preventDefault()}>Quên mật khẩu?</a>
+        </div>
+
+        <button type="submit" className="submit" style={{['--rc']:role.color, boxShadow:`0 8px 20px ${role.color}44`}}>
+          <Icon name="login" size={18}/>Đăng nhập
+        </button>
+      </form>
+
+      <div className="alt-role">
+        Không phải bạn? <button onClick={onBack}>Chọn tư cách khác</button>
+      </div>
+    </div>
+  );
+}
+
+function App(){
+  const [role, setRole] = useState(null);
+  return (
+    <div className="page">
+      <Logo/>
+      <div className="stage">
+        {role ? <LoginForm role={role} onBack={()=>setRole(null)}/> : <RolePicker onPick={setRole}/>}
+      </div>
+      <div className="foot">© 2026 Tool Editor · Vườn Tri Thức Việt</div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
