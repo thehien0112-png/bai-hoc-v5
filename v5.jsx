@@ -73,7 +73,6 @@ function CreateSection({role, onRole}){
   return (
     <>
       <div className="v5-head">
-        <RoleSwitch role={role} onRole={onRole}/>
         <h1 className="v5-title"><span className="t-ic" style={{background:'linear-gradient(135deg,#3b82f6,#6d5cf6)'}}><Icon name="wand" size={22}/></span>Tạo nội dung</h1>
         <p className="v5-subtitle">Chọn <b>nhiều loại</b> học liệu và bài tập cùng lúc, thiết lập chi tiết cho từng loại, rồi để AI tạo tất cả trong một lần.</p>
       </div>
@@ -277,7 +276,6 @@ function AssignSection(){
   return (
     <>
       <div className="v5-head">
-        <div className="v5-crumb"><span>Tiếng Việt · Lớp 2</span><Icon name="chevRight" size={13}/><span style={{color:'var(--ink-soft)',fontWeight:600}}>Giao bài</span></div>
         <h1 className="v5-title"><span className="t-ic" style={{background:'#2563eb'}}><Icon name="send" size={22}/></span>Giao bài</h1>
         <p className="v5-subtitle">Chọn nội dung đã tạo và giao cho lớp, nhóm hoặc từng học sinh kèm hạn nộp.</p>
       </div>
@@ -310,7 +308,6 @@ function ReviewSection(){
   return (
     <>
       <div className="v5-head">
-        <div className="v5-crumb"><span>Tiếng Việt · Lớp 2</span><Icon name="chevRight" size={13}/><span style={{color:'var(--ink-soft)',fontWeight:600}}>Review</span></div>
         <h1 className="v5-title"><span className="t-ic" style={{background:'#7c3aed'}}><Icon name="clipboard" size={22}/></span>Review</h1>
         <p className="v5-subtitle">Duyệt nội dung do AI tạo trước khi đưa vào thư viện hoặc giao cho học sinh.</p>
       </div>
@@ -349,7 +346,6 @@ function ReportSection(){
   return (
     <>
       <div className="v5-head">
-        <div className="v5-crumb"><span>Tiếng Việt · Lớp 2</span><Icon name="chevRight" size={13}/><span style={{color:'var(--ink-soft)',fontWeight:600}}>Xem báo cáo</span></div>
         <h1 className="v5-title"><span className="t-ic" style={{background:'#0d9488'}}><Icon name="chart" size={22}/></span>Xem báo cáo</h1>
         <p className="v5-subtitle">Tổng quan tiến độ học tập, mức độ hoàn thành và kết quả theo lớp.</p>
       </div>
@@ -424,6 +420,7 @@ function V5Workspace({role, onLogout, onRole}){
 
         <main className="v5-content">
           <div className="wrap">
+            <RoleSwitch role={role} onRole={onRole}/>
             {section==='taonoidung' && <CreateSection role={role} onRole={onRole}/>}
             {section==='giaobai'    && <AssignSection/>}
             {section==='review'     && <ReviewSection/>}
